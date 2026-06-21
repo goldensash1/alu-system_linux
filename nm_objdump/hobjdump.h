@@ -3,6 +3,8 @@
 
 #include "elf_common.h"
 
+extern const char *prog;
+
 /* hobjdump.c */
 int hobjdump_file(const char *path);
 
@@ -24,7 +26,8 @@ void ob_dump_sections(elf_file *f);
 
 /* objdump_dump.c */
 int ob_addr_width(uint64_t v);
-void ob_print_line(elf_file *f, size_t foff, uint64_t vaddr, size_t rem, int w);
+void ob_print_line(elf_file *f, size_t foff, uint64_t vaddr,
+	size_t rem, int w);
 void ob_dump_one(elf_file *f, size_t i);
 
 #endif /* HOBJDUMP_H */

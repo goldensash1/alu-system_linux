@@ -36,6 +36,18 @@ static void ver_fill(elf_file *f, vmap *vm, vctx *c, size_t i)
 }
 
 /**
+ * sec_off - Get the file offset of the first section of a given type
+ * @f: ELF file
+ * @type: Section type to look for (SHT_*)
+ *
+ * Return: File offset of the section, or 0 when it is absent
+ */
+static size_t sec_off(elf_file *f, uint32_t type)
+{
+	return ((size_t)get_sh_offset(f, find_section_by_type(f, type)));
+}
+
+/**
  * ver_build - Build the dynamic-symbol version map for a file
  * @f: ELF file
  * @vm: Version map to populate
@@ -51,13 +63,11 @@ void ver_build(elf_file *f, vmap *vm)
 	if (!ds)
 		return;
 	c.dynstr = (size_t)get_sh_offset(f, (size_t)get_sh_link(f, ds));
-	c.versym = (size_t)get_sh_offset(f, find_section_by_type(f, SHT_GNU_versym));
-	c.verneed = (size_t)get_sh_offset(f, find_section_by_type(f, SHT_GNU_verneed));
-	c.verdef = (size_t)get_sh_offset(f, find_section_by_type(f, SHT_GNU_verdef));
+	c.versym = sec_off(f, SHT_GNU_versym);
+	c.verneed = sec_off(f, SHT_GNU_verneed);
+	c.verdef = sec_off(f, SHT_GNU_verdef);
 	c.base = (size_t)get_sh_offset(f, ds);
 	c.entsz = (size_t)get_sh_entsize(f, ds);
-	if (!find_section_by_type(f, SHT_GNU_versym))
-		c.versym = 0;
 	vm->n = c.entsz ? (size_t)get_sh_size(f, ds) / c.entsz : 0;
 	vm->names = calloc(vm->n ? vm->n : 1, sizeof(char *));
 	vm->suffix = calloc(vm->n ? vm->n : 1, sizeof(char *));

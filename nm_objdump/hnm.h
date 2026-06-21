@@ -3,6 +3,8 @@
 
 #include "elf_common.h"
 
+extern const char *prog;
+
 /**
  * struct nsym - Normalized ELF symbol independent of the ELF class
  * @name: Offset of the symbol name in its string table

@@ -1,5 +1,8 @@
 #include "hobjdump.h"
 
+/** prog - Name the program was invoked with, used for error messages */
+const char *prog = "hobjdump";
+
 /**
  * hobjdump_file - Process a single file for the hobjdump command
  * @path: Path of the file to analyze
@@ -12,12 +15,12 @@ int hobjdump_file(const char *path)
 
 	if (read_file(path, &f))
 	{
-		fprintf(stderr, "hobjdump: '%s': %s\n", path, strerror(errno));
+		fprintf(stderr, "%s: '%s': %s\n", prog, path, strerror(errno));
 		return (1);
 	}
 	if (check_elf(&f))
 	{
-		fprintf(stderr, "hobjdump: %s: File format not recognized\n", path);
+		fprintf(stderr, "%s: %s: File format not recognized\n", prog, path);
 		free_file(&f);
 		return (1);
 	}
@@ -40,6 +43,7 @@ int main(int argc, char **argv)
 	char *def[] = {"a.out"};
 	char **files = argv + 1;
 
+	prog = argv[0];
 	if (n == 0)
 	{
 		files = def;

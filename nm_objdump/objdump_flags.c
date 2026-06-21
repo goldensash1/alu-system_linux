@@ -33,7 +33,8 @@ uint32_t ob_compute_flags(elf_file *f)
 		fl |= 0x040;
 	if (type == ET_EXEC || type == ET_DYN)
 		fl |= 0x100;
-	if (find_section_by_type(f, SHT_SYMTAB) || find_section_by_type(f, SHT_DYNSYM))
+	if (find_section_by_type(f, SHT_SYMTAB) ||
+		find_section_by_type(f, SHT_DYNSYM))
 		fl |= 0x010;
 	if (type == ET_REL && (find_section_by_type(f, SHT_RELA) ||
 		find_section_by_type(f, SHT_REL)))

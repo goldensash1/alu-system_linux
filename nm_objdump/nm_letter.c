@@ -14,7 +14,10 @@ char nm_section_letter(elf_file *f, uint16_t shndx)
 
 	if (t == SHT_NOBITS && (fl & SHF_ALLOC) && (fl & SHF_WRITE))
 		return ('B');
-	if (t == SHT_PROGBITS && (fl & SHF_ALLOC) && (fl & SHF_EXECINSTR))
+	if (t == SHT_INIT_ARRAY || t == SHT_FINI_ARRAY ||
+		t == SHT_PREINIT_ARRAY)
+		return ('T');
+	if ((fl & SHF_ALLOC) && (fl & SHF_EXECINSTR))
 		return ('T');
 	if ((fl & SHF_ALLOC) && (fl & SHF_WRITE))
 		return ('D');

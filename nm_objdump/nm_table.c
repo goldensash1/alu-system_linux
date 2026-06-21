@@ -72,7 +72,7 @@ int nm_process(elf_file *f)
 
 	if (!sym)
 	{
-		fprintf(stderr, "hnm: %s: no symbols\n", f->name);
+		fprintf(stderr, "%s: %s: no symbols\n", prog, f->name);
 		return (1);
 	}
 	ver_build(f, &vm);
