@@ -3,8 +3,6 @@
 
 #include "elf_common.h"
 
-extern const char *prog;
-
 /**
  * struct nsym - Normalized ELF symbol independent of the ELF class
  * @name: Offset of the symbol name in its string table
@@ -55,11 +53,11 @@ typedef struct vctx
 } vctx;
 
 /* hnm.c */
-int hnm_file(const char *path, int multi, int idx);
+int hnm_file(const char *prog, const char *path, int multi, int idx);
 
 /* nm_table.c */
 nsym read_sym(elf_file *f, size_t base, size_t entsz, size_t i);
-int nm_process(elf_file *f);
+int nm_process(elf_file *f, const char *prog);
 
 /* nm_letter.c */
 char nm_section_letter(elf_file *f, uint16_t shndx);

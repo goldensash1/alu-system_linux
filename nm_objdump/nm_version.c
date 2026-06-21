@@ -55,11 +55,14 @@ static size_t sec_off(elf_file *f, uint32_t type)
 void ver_build(elf_file *f, vmap *vm)
 {
 	size_t ds = find_section_by_type(f, SHT_DYNSYM), i;
+	unsigned char osabi = f->data[EI_OSABI];
 	vctx c;
 
 	vm->n = 0;
 	vm->names = NULL;
 	vm->suffix = NULL;
+	if (osabi != ELFOSABI_NONE && osabi != ELFOSABI_GNU)
+		return;
 	if (!ds)
 		return;
 	c.dynstr = (size_t)get_sh_offset(f, (size_t)get_sh_link(f, ds));

@@ -1,17 +1,15 @@
 #include "hnm.h"
 
-/** prog - Name the program was invoked with, used for error messages */
-const char *prog = "hnm";
-
 /**
  * hnm_file - Process a single file for the hnm command
+ * @prog: Name the program was invoked with, used for error messages
  * @path: Path of the file to analyze
  * @multi: Non-zero when several files were given on the command line
  * @idx: Index of this file among the command line arguments
  *
  * Return: 0 on success, 1 on any error
  */
-int hnm_file(const char *path, int multi, int idx)
+int hnm_file(const char *prog, const char *path, int multi, int idx)
 {
 	elf_file f;
 	int r;
@@ -34,7 +32,7 @@ int hnm_file(const char *path, int multi, int idx)
 			printf("\n");
 		printf("%s:\n", path);
 	}
-	r = nm_process(&f);
+	r = nm_process(&f, prog);
 	free_file(&f);
 	return (r);
 }
@@ -52,13 +50,12 @@ int main(int argc, char **argv)
 	char *def[] = {"a.out"};
 	char **files = argv + 1;
 
-	prog = argv[0];
 	if (n == 0)
 	{
 		files = def;
 		n = 1;
 	}
 	for (i = 0; i < n; i++)
-		status |= hnm_file(files[i], n > 1, i);
+		status |= hnm_file(argv[0], files[i], n > 1, i);
 	return (status);
 }

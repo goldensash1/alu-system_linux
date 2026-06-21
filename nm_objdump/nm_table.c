@@ -62,10 +62,11 @@ static void nm_emit(elf_file *f, size_t sym, vmap *vm)
 /**
  * nm_process - Locate the symbol table and print all symbols
  * @f: ELF file
+ * @prog: Name the program was invoked with, used for error messages
  *
  * Return: 0 on success, 1 when the file has no symbols
  */
-int nm_process(elf_file *f)
+int nm_process(elf_file *f, const char *prog)
 {
 	size_t sym = find_section_by_type(f, SHT_SYMTAB);
 	vmap vm;

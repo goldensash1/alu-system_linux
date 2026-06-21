@@ -1,15 +1,13 @@
 #include "hobjdump.h"
 
-/** prog - Name the program was invoked with, used for error messages */
-const char *prog = "hobjdump";
-
 /**
  * hobjdump_file - Process a single file for the hobjdump command
+ * @prog: Name the program was invoked with, used for error messages
  * @path: Path of the file to analyze
  *
  * Return: 0 on success, 1 on any error
  */
-int hobjdump_file(const char *path)
+int hobjdump_file(const char *prog, const char *path)
 {
 	elf_file f;
 
@@ -43,13 +41,12 @@ int main(int argc, char **argv)
 	char *def[] = {"a.out"};
 	char **files = argv + 1;
 
-	prog = argv[0];
 	if (n == 0)
 	{
 		files = def;
 		n = 1;
 	}
 	for (i = 0; i < n; i++)
-		status |= hobjdump_file(files[i]);
+		status |= hobjdump_file(argv[0], files[i]);
 	return (status);
 }

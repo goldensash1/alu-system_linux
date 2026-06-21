@@ -3,10 +3,8 @@
 
 #include "elf_common.h"
 
-extern const char *prog;
-
 /* hobjdump.c */
-int hobjdump_file(const char *path);
+int hobjdump_file(const char *prog, const char *path);
 
 /* objdump_header.c */
 void ob_print_header(elf_file *f);
