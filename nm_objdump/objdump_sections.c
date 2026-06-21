@@ -17,6 +17,9 @@ static int ob_skip(elf_file *f, size_t i, size_t shstr, size_t symstr)
 		return (1);
 	if (t == SHT_SYMTAB || t == SHT_SYMTAB_SHNDX)
 		return (1);
+	if ((t == SHT_REL || t == SHT_RELA) &&
+		!(get_sh_flags(f, i) & SHF_ALLOC))
+		return (1);
 	if (t == SHT_NULL || t == SHT_NOBITS)
 		return (1);
 	if (get_sh_size(f, i) == 0)

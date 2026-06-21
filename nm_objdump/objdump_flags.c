@@ -1,22 +1,6 @@
 #include "hobjdump.h"
 
 /**
- * ob_has_debug - Check whether the file carries debug sections
- * @f: ELF file
- *
- * Return: 1 if a section name starts with ".debug", 0 otherwise
- */
-int ob_has_debug(elf_file *f)
-{
-	size_t i, n = (size_t)get_e_shnum(f);
-
-	for (i = 1; i < n; i++)
-		if (strncmp(get_sh_str(f, i), ".debug", 6) == 0)
-			return (1);
-	return (0);
-}
-
-/**
  * ob_compute_flags - Compute the BFD-style file flags
  * @f: ELF file
  *
@@ -39,8 +23,6 @@ uint32_t ob_compute_flags(elf_file *f)
 	if (type == ET_REL && (find_section_by_type(f, SHT_RELA) ||
 		find_section_by_type(f, SHT_REL)))
 		fl |= 0x001;
-	if (ob_has_debug(f))
-		fl |= 0x008;
 	return (fl);
 }
 

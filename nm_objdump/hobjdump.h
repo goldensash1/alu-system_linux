@@ -15,7 +15,6 @@ void ob_file(elf_file *f);
 /* objdump_flags.c */
 uint32_t ob_compute_flags(elf_file *f);
 void ob_print_flags(uint32_t fl);
-int ob_has_debug(elf_file *f);
 
 /* objdump_arch.c */
 const char *ob_format_name(elf_file *f);
