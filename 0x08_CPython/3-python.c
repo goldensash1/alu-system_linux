@@ -48,8 +48,9 @@ void print_python_bytes(PyObject *p)
  */
 void print_python_float(PyObject *p)
 {
-	PyObject *repr;
-	const char *str;
+	double val;
+	char buf[100];
+	int i, has_dot;
 
 	printf("[.] float object info\n");
 
@@ -60,10 +61,27 @@ void print_python_float(PyObject *p)
 		return;
 	}
 
-	repr = PyObject_Repr(p);
-	str = PyUnicode_AsUTF8(repr);
-	printf("  value: %s\n", str);
-	Py_DECREF(repr);
+	val = ((PyFloatObject *)p)->ob_fval;
+	snprintf(buf, sizeof(buf), "%.16g", val);
+
+	has_dot = 0;
+	for (i = 0; buf[i] != '\0'; i++)
+	{
+		if (buf[i] == '.' || buf[i] == 'e' || buf[i] == 'E' ||
+		    buf[i] == 'n' || buf[i] == 'N' || buf[i] == 'i' || buf[i] == 'I')
+		{
+			has_dot = 1;
+			break;
+		}
+	}
+	if (!has_dot)
+	{
+		buf[i] = '.';
+		buf[i + 1] = '0';
+		buf[i + 2] = '\0';
+	}
+
+	printf("  value: %s\n", buf);
 	fflush(stdout);
 }
 
@@ -79,6 +97,8 @@ void print_python_list(PyObject *p)
 	PyListObject *list;
 	PyObject *item;
 
+	printf("[*] Python list info\n");
+
 	if (!PyList_Check(p))
 	{
 		printf("  [ERROR] Invalid List Object\n");
@@ -89,7 +109,6 @@ void print_python_list(PyObject *p)
 	size = (long)((PyVarObject *)p)->ob_size;
 	list = (PyListObject *)p;
 
-	printf("[*] Python list info\n");
 	printf("[*] Size of the Python List = %ld\n", size);
 	printf("[*] Allocated = %ld\n", (long)list->allocated);
 	fflush(stdout);
