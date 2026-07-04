@@ -60,23 +60,39 @@ pid_t start_child(char **argv)
  */
 void run_trace(pid_t child)
 {
-	int status, is_entry;
+	int status, is_entry, pending;
 	struct user_regs_struct regs;
 	syscall_t const *sc;
 
 	is_entry = 1;
+	pending = 0;
 	while (1)
 	{
 		if (ptrace(PTRACE_SYSCALL, child, NULL, NULL) == -1)
 			break;
 		waitpid(child, &status, 0);
 		if (WIFEXITED(status) || WIFSIGNALED(status))
+		{
+			if (pending)
+			{
+				printf("\n");
+				fflush(stdout);
+			}
 			break;
+		}
 		ptrace(PTRACE_GETREGS, child, NULL, &regs);
 		if (is_entry)
 		{
 			sc = get_syscall(regs.orig_rax);
-			printf("%s\n", sc ? sc->name : "?");
+			printf("%s", sc ? sc->name : "?");
+			fflush(stdout);
+			pending = 1;
+		}
+		else
+		{
+			printf("\n");
+			fflush(stdout);
+			pending = 0;
 		}
 		is_entry = !is_entry;
 	}
@@ -110,6 +126,7 @@ int main(int argc, char **argv)
 	ptrace(PTRACE_GETREGS, child, NULL, &regs);
 	sc = get_syscall(regs.orig_rax);
 	printf("%s\n", sc ? sc->name : "?");
+	fflush(stdout);
 
 	run_trace(child);
 	return (0);

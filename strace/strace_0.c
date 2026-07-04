@@ -55,7 +55,10 @@ void run_trace(pid_t child)
 			break;
 		ptrace(PTRACE_GETREGS, child, NULL, &regs);
 		if (is_entry)
+		{
 			printf("%lu\n", (unsigned long)regs.orig_rax);
+			fflush(stdout);
+		}
 		is_entry = !is_entry;
 	}
 }
@@ -86,6 +89,7 @@ int main(int argc, char **argv)
 		return (0);
 	ptrace(PTRACE_GETREGS, child, NULL, &regs);
 	printf("%lu\n", (unsigned long)regs.orig_rax);
+	fflush(stdout);
 
 	run_trace(child);
 	return (0);

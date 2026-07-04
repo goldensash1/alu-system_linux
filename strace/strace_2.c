@@ -87,18 +87,23 @@ void run_trace(pid_t child)
 		if (WIFEXITED(status) || WIFSIGNALED(status))
 		{
 			if (pending)
+			{
 				printf(" = ?\n");
+				fflush(stdout);
+			}
 			break;
 		}
 		ptrace(PTRACE_GETREGS, child, NULL, &regs);
 		if (is_entry)
 		{
 			print_name(regs.orig_rax);
+			fflush(stdout);
 			pending = 1;
 		}
 		else
 		{
 			printf(" = %#lx\n", (unsigned long)regs.rax);
+			fflush(stdout);
 			pending = 0;
 		}
 		is_entry = !is_entry;
@@ -132,6 +137,7 @@ int main(int argc, char **argv)
 	ptrace(PTRACE_GETREGS, child, NULL, &regs);
 	print_name(regs.orig_rax);
 	printf(" = %#lx\n", (unsigned long)regs.rax);
+	fflush(stdout);
 
 	run_trace(child);
 	return (0);
