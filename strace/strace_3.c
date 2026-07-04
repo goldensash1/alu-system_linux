@@ -51,11 +51,6 @@ void print_syscall(syscall_t const *sc, struct user_regs_struct const *regs)
 		{
 			if (i > 0)
 				printf(", ");
-			if (sc->params[i] == VARARGS)
-			{
-				printf("...");
-				break;
-			}
 			printf("%#lx", args[i]);
 		}
 	}
