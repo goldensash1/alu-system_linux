@@ -30,6 +30,10 @@ syscall_t const *get_syscall(unsigned long num)
  * @sc: the syscall description, or NULL if unknown
  * @regs: the traced process' registers at syscall-enter
  *
+ * The closing parenthesis is intentionally not printed here: it is printed
+ * at syscall-exit next to the return value, so that any output produced by
+ * the traced child in-between interleaves at the right place.
+ *
  * Return: nothing
  */
 void print_syscall(syscall_t const *sc, struct user_regs_struct const *regs)
@@ -54,7 +58,6 @@ void print_syscall(syscall_t const *sc, struct user_regs_struct const *regs)
 			printf("%#lx", args[i]);
 		}
 	}
-	printf(")");
 }
 
 /**
@@ -106,7 +109,7 @@ void run_trace(pid_t child)
 		{
 			if (pending)
 			{
-				printf(" = ?\n");
+				printf(") = ?\n");
 				fflush(stdout);
 			}
 			break;
@@ -120,7 +123,7 @@ void run_trace(pid_t child)
 		}
 		else
 		{
-			printf(" = %#lx\n", (unsigned long)regs.rax);
+			printf(") = %#lx\n", (unsigned long)regs.rax);
 			fflush(stdout);
 			pending = 0;
 		}
@@ -154,7 +157,7 @@ int main(int argc, char **argv)
 		return (0);
 	ptrace(PTRACE_GETREGS, child, NULL, &regs);
 	print_syscall(get_syscall(regs.orig_rax), &regs);
-	printf(" = %#lx\n", (unsigned long)regs.rax);
+	printf(") = %#lx\n", (unsigned long)regs.rax);
 	fflush(stdout);
 
 	run_trace(child);
