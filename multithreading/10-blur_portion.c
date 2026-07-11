@@ -17,7 +17,7 @@ static void blur_pixel(blur_portion_t const *portion, size_t px, size_t py)
 	kernel_t const *kernel = portion->kernel;
 	size_t kx, ky, half = kernel->size / 2;
 	long ix, iy;
-	double r = 0, g = 0, b = 0, weight = 0, k;
+	float r = 0, g = 0, b = 0, weight = 0, k;
 	pixel_t *dst;
 
 	for (ky = 0; ky < kernel->size; ky++)
