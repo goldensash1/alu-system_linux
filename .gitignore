@@ -1,0 +1,16 @@
+# Claude Code local tooling / machine-specific config
+.claude/
+
+# Compiled objects and binaries
+*.o
+*.a
+*.so
+
+# strace project binaries
+strace/strace_0
+strace/strace_1
+strace/strace_2
+strace/strace_3
+
+# Editor/OS noise
+.DS_Store
