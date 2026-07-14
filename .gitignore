@@ -12,5 +12,17 @@ strace/strace_1
 strace/strace_2
 strace/strace_3
 
+# sockets project binaries
+sockets/0-server
+sockets/1-server
+sockets/2-client
+sockets/3-server
+sockets/todo_api_0
+sockets/todo_api_1
+sockets/todo_api_2
+sockets/todo_api_3
+sockets/todo_api_4
+sockets/todo_api_5
+
 # Editor/OS noise
 .DS_Store
