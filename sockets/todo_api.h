@@ -2,6 +2,7 @@
 #define TODO_API_H
 
 #include <stddef.h>
+#include <sys/types.h>
 
 #define BUF_SIZE 65536
 #define MAX_PAIRS 32

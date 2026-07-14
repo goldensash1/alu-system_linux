@@ -46,7 +46,7 @@ void send_response(int fd, int code, const char *reason,
 	length_line[0] = '\0';
 	if (content_type)
 		snprintf(length_line, sizeof(length_line),
-			"Content-Length: %zu\r\n", body_len);
+			"Content-Length: %lu\r\n", (unsigned long)body_len);
 
 	header_len = snprintf(header, sizeof(header),
 		"HTTP/1.1 %d %s\r\n"
